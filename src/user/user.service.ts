@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { User, UserDocument } from "./user.schema";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 
 @Injectable()
 export class UserService {
@@ -27,13 +27,12 @@ export class UserService {
     return newUser;
   }
   async addBalance(id: string, amount: number): Promise<User> {
-    console.log(new Types.ObjectId(id));
     const user = await this.userModel.findByIdAndUpdate(
       id,
       { $inc: { balance: amount } },
       { new: true },
     );
-    console.log(user);
+
     if (!user) {
       throw new NotFoundException(`User not found`);
     }
@@ -41,5 +40,12 @@ export class UserService {
       throw new BadRequestException("Balance cannot be negative");
     }
     return user;
+  }
+  async getAllUsers(): Promise<User[]> {
+    const users = await this.userModel.find();
+    if (users.length == 0) {
+      throw new NotFoundException("No users found");
+    }
+    return users;
   }
 }

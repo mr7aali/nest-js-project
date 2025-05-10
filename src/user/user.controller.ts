@@ -7,8 +7,11 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get(":id")
   getSingleUser(@Param("id") id: string) {
-    console.log(id);
     return this.userService.getUserById(id);
+  }
+  @Get("/")
+  getAllUsers() {
+    return this.userService.getAllUsers();
   }
   @Post()
   createUser(@Body() body: User) {
@@ -22,7 +25,6 @@ export class UserController {
   }
   @Post("/add_balance")
   addBalance(@Body() body: { id: string; amount: number }) {
-    console.log(body.id);
     return this.userService.addBalance(body.id, body.amount);
   }
 }
