@@ -22,7 +22,7 @@ export class ReadingsService {
       throw new Error("User not found");
     }
     const existingReadings = await this.readingModel
-      .find({})
+      .find({ u_id: readings.u_id, _id: readings.user_id })
       .sort({ r_id: -1 })
       .limit(1);
 

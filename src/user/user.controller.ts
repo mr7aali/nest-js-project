@@ -25,6 +25,7 @@ export class UserController {
   }
   @Post("/add_balance")
   addBalance(@Body() body: { id: string; amount: number }) {
+    console.log("test", body.id, body.amount);
     return this.userService.addBalance(body.id, body.amount);
   }
 }
