@@ -10,8 +10,8 @@ export class ReadingsService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Reading.name) private readingModel: Model<ReadingDocument>,
   ) {}
-  getReadings() {
-    return "Hello from readings";
+  async getReadings() {
+    return await this.readingModel.find({}).sort({ r_id: -1 }).limit(10);
   }
   async addReadings(readings: Reading) {
     const isUserExists = await this.userModel.findOne({
@@ -21,18 +21,17 @@ export class ReadingsService {
     if (!isUserExists) {
       throw new Error("User not found");
     }
+
     const existingReadings = await this.readingModel
-      .find({ u_id: readings.u_id, _id: readings.user_id })
+      .find({})
       .sort({ r_id: -1 })
       .limit(1);
 
     if (existingReadings.length > 0) {
+      console.log(existingReadings);
       readings.r_id = existingReadings[0].r_id + 1;
-      readings.unit =
-        readings.value > existingReadings[0].value
-          ? readings.value - existingReadings[0].value
-          : 0;
     }
+    // console.log(readings);
     const newreading = new this.readingModel(readings);
     const savedReading = await newreading.save();
     if (!savedReading) {

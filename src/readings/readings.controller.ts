@@ -14,6 +14,7 @@ export class ReadingsController {
       value: body.value,
       u_id: body.u_id,
       unit: 0,
+      prepaidAmmount: -1,
     };
     return this.readingsService.addReadings(reading);
   }
